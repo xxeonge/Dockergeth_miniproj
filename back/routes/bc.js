@@ -60,8 +60,7 @@ router.post('/register', async (req, res, next) => {
             let t1 = moment()
             logger.info(`${clientRequest},${moment(t0).format('x')},${auctionOwner},insertAuction,DB,${moment.duration(t1.diff(t0)).asMilliseconds()}`)
 
-            const web3 = new Web3(new Web3.providers.HttpProvider("172.18.0.13", { reconnect: { auto: true } }))
-            const box = new web3.eth.Contract(complieBox, boxAddress)
+            const web3 = new Web3(new Web3.providers.HttpProvider(nodeIPAddress[requestNumber % (nodeIPAddress.length)], { reconnect: { auto: true } }))            const box = new web3.eth.Contract(complieBox, boxAddress)
             requestNumber += 1
             console.log(box.methods.createAuction())
             t0 = moment()
