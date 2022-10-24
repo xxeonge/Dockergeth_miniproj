@@ -1,0 +1,9 @@
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /root/go/bin/'file name'
+
+# output
+output.logstash:
+  hosts: ["logstash:5000"]
