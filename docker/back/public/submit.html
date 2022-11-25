@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>인증서 발급 관리 시스템</title>
+    <link rel="stylesheet" type="text/css" href="static/css/document-registry.css" />
+    <script src="static/js/jquery-3.1.1.min.js"></script>
+    <script src="static/js/sha256.min.js"></script>
+    <script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
+    <script src="static/js/cert.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+  
+  <style> input[type=text]{
+  border: 1px solid #9caec7;
+  height: 30px;
+  width:250px;
+  font-size:18px;
+  text-align:left;
+  color:#696969;
+    }
+  </style>
+
+<body style ="background-color: #FFFFFF">
+    <div class="container">
+    <header id="menu">
+        <h2> SPEC-A</h2>
+        <nav>
+            <ul>
+                <li><a href="/"><b>Home</b></a> </li>
+                <li><a href="submit"><b>인증서 등록</b></a></li>
+                <li><a href="verify"><b>인증서 검증  &nbsp; &nbsp; &nbsp; </b></a></li>
+            </ul>
+        </nav>
+    </header>
+    </div>
+<main>
+    <section id="viewSubmitDocument">
+        <h4> SPEC-A Certificate System </h4>
+        <h3>신규 인증서 발급</h3>
+        
+        <p>인증서를 발급합니다. <br> 사용자의 이름과 생년월일을 입력해주세요.</p>
+        <form id="insert_form">
+            <label for="usname" class="title">이름 </label>
+            <input type="text" id="usname" name="usname" value="" placeholder="Name ..">
+          
+            <br>
+            <label for="usbirth" class="title">생년월일</label>
+            <input type="text" id="usbirth" name="usbirth" value="" placeholder="00001234 ...">
+              
+            <br><br><br>              
+            <input type="button" style="margin-align:-7px" id="itemUploadButton" value="Submit">
+        </form>
+        <br>
+        <div>
+            <input type="button" id="showTableButton" value="List Show" />
+            <input type="button" id="deletecertButton" value="Revoke" />  
+        </div>
+        <!-- <div id="myTable"></div> -->
+      </section>
+    <div id="myModal" class = "modal">
+        <div class = "modal-content">
+            <span class="close">close</span>
+            <div id = "myTable"></div>
+        </div>
+    </div>
+</main>
+<script>
+    var modal = document.getElementById('myModal');
+    var btn = document.getElementById("showTableButton");
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on the button, open the modal 
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+      if (event.target == modal) {
+          modal.style.display = "none";
+      }
+    }
+</script>
+</body>
+</html>

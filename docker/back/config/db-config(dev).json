@@ -1,8 +1,8 @@
 {
     "host": "db",
     "user": "root",   
-    "password": "homerun1004!",
-    "database": "blue_auction",
+    "password": "speca",
+    "database": "mydata",
     "waitForConnections": true,
     "connectTimeout"  : 36000,
     "connectionLimit" : 100

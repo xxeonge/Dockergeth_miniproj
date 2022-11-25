@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>인증서 발급 관리 시스템</title>
+    <link rel="stylesheet" type="text/css" href="static/css/document-registry.css" />
+    <script src="static/js/jquery-3.1.1.min.js"></script>
+    <script src="static/js/sha256.min.js"></script>
+    <script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
+    <script src="static/js/cert.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+  
+  <style> input[type=text]{
+  border: 1px solid #9caec7;
+  height: 30px;
+  width:250px;
+  font-size:18px;
+  text-align:left;
+  color:#696969;
+    }
+  </style>
+
+<body style ="background-color: #FFFFFF">
+    <div class="container">
+    <header id="menu">
+        <h2> SPEC-A</h2>
+        <nav>
+            <ul>
+                <li><a href="/"><b>Home</b></a> </li>
+                <li><a href="submit"><b>인증서 등록</b></a></li>
+                <li><a href="verify"><b>인증서 검증  &nbsp; &nbsp; &nbsp; </b></a></li>
+            </ul>
+        </nav>
+    </header>
+    </div>
+<main>
+    <section id="viewVerifyDocument">
+        <h4> SPEC-A Certificate System </h4>
+        <h3>인증서 검증</h3>
+      
+        <p>인증서에 대한 검증을 수행합니다. <br>하단에 검증하고자 하는 인증서의 정보를 입력해주세요.</p>
+        <form>
+            <label for="vname" class="title">이름 </label>
+                <input type="text" id="vname" name="vname" value="" placeholder="">
+        
+            <br>
+            <label for="vbirth" class="title">생년월일</label>
+                <input type="text" id="vbirth" name="vbirth" value="" placeholder="0000-00-00 ...">
+            <br>
+            <label for="vnotB" class="title">유효기간(시작)</label>
+                <input type="text" id="vnotB" name="vnotB" value="" placeholder="Please enter unix time">
+            <br>
+            <label for="vnotA" class="title">유효기간(끝)</label>
+                <input type="text" id="vnotA" name="vnotA" value="" placeholder="Please enter unix time">
+            <br>
+            <label for="vcertId" class="title">인증서 ID</label>
+                <input type="text" id="vcertId" name="vcertId" value="" placeholder="0x...">
+            <br>
+            
+            <br><br>             
+                <input type="button" style="margin-align:-7px" id="documentVerifyButton" value="Submit">
+          
+           </form>
+    </section> 
+</main>
+</body>

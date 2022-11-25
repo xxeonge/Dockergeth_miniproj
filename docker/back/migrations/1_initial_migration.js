@@ -1,4 +1,4 @@
-const Migrations = artifacts.require("../contracts/BlockchainBox.sol");
+const Migrations = artifacts.require("../contracts/Certificate.sol");
 module.exports = function (deployer) {
   deployer.deploy(Migrations);
 };

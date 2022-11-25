@@ -3,14 +3,17 @@
 for var in $(seq 1 $3)
 do
     bash ./startWithServer.sh $1
-    geth=`exit | geth attach http://localhost:8547`
+    geth = `exit | geth attach http://localhost:8547`
     echo 'Wait Geth'
     while [[ "$geth" =~ "Fatal" ]];
     do
         geth=`exit | geth attach http://localhost:8547` 
         sleep 30s
     done
-    python3 RequsetGenerator/main.py $2
+    cd ./RequsetGenerator
+    pip3 install -r ./requirements.txt
+    python3 main.py $2
+    cd ../
     mkdir -p Log/$1/$2//$var
     docker cp ether.log-server.com:/root/go/bin/'file name' Log/$1/$2/$var/~log-sever.log
     for node in $(seq 1 $1)

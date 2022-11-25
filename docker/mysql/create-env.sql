@@ -1,134 +1,119 @@
-create database blue_auction;
-use blue_auction;
+CREATE DATABASE  IF NOT EXISTS `mydata` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `mydata`;
+-- MySQL dump 10.13  Distrib 8.0.27, for Win64 (x86_64)
+--
+-- Host: 127.0.0.1    Database: mydata
+-- ------------------------------------------------------
+-- Server version	8.0.27
 
-CREATE TABLE `item_categories` (
-  `category_code` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) NOT NULL,
-  PRIMARY KEY (`category_code`)
-);
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-CREATE TABLE `item_status` (
-  `status_code` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) NOT NULL,
-  PRIMARY KEY (`status_code`)
-);
+--
+-- Table structure for table `issuer_info`
+--
 
-CREATE TABLE `users` (
+DROP TABLE IF EXISTS `issuer_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `issuer_info` (
+  `issuer_id` int NOT NULL AUTO_INCREMENT,
+  `issuer_name` varchar(45) NOT NULL,
+  `issuer_pubkey` varchar(42) NOT NULL,
+  `issuer_contract_num` varchar(42) NOT NULL,
+  PRIMARY KEY (`issuer_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `issuer_info`
+--
+
+LOCK TABLES `issuer_info` WRITE;
+/*!40000 ALTER TABLE `issuer_info` DISABLE KEYS */;
+INSERT INTO `issuer_info` VALUES (1,'speca','1','1');
+/*!40000 ALTER TABLE `issuer_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_cert_info`
+--
+
+DROP TABLE IF EXISTS `user_cert_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_cert_info` (
+  `cert_num` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `cert_addr` varchar(42) NOT NULL,
+  `cert_effective_date` datetime NOT NULL,
+  `cert_expiration_date` datetime NOT NULL,
+  `cert_id` char(66) NOT NULL,
+  PRIMARY KEY (`cert_num`),
+  KEY `fk_USER_CERT_INFO_USER_INFO1_idx` (`user_id`),
+  CONSTRAINT `fk_USER_CERT_INFO_USER_INFO1` FOREIGN KEY (`user_id`) REFERENCES `user_info` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_cert_info`
+--
+
+LOCK TABLES `user_cert_info` WRITE;
+/*!40000 ALTER TABLE `user_cert_info` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_cert_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_info`
+--
+
+DROP TABLE IF EXISTS `user_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_info` (
   `user_id` int NOT NULL AUTO_INCREMENT,
-  `id` varchar(20) NOT NULL,
-  `pw` varchar(100) NOT NULL,
-  `balance` int DEFAULT '1000000',
+  `issuer_id` int NOT NULL,
+  `user_name` varchar(45) NOT NULL,
+  `user_birth` varchar(50) NOT NULL,
+  `user_pubkey` varchar(42) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
-  UNIQUE KEY `user_uk` (`id`)
-);
+  KEY `fk_USER_INFO_ISSUER_INFO_idx` (`issuer_id`),
+  CONSTRAINT `fk_USER_INFO_ISSUER_INFO` FOREIGN KEY (`issuer_id`) REFERENCES `issuer_info` (`issuer_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-CREATE TABLE `auction_items` (
-  `item_id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `category_code` int NOT NULL,
-  `status_code` int NOT NULL,
-  `name` varchar(45) NOT NULL,
-  `start_date` datetime NOT NULL,
-  `close_date` datetime NOT NULL,
-  `reserve_price` int DEFAULT NULL,
-  `img_url` varchar(500) DEFAULT NULL,
-  `description` varchar(1000) DEFAULT NULL,
-  `contract` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`item_id`),
-  KEY `fk_category_idx` (`category_code`),
-  KEY `fk_status_idx` (`status_code`),
-  KEY `fk_item_user_idx` (`user_id`),
-  CONSTRAINT `fk_item_category` FOREIGN KEY (`category_code`) REFERENCES `item_categories` (`category_code`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_item_status` FOREIGN KEY (`status_code`) REFERENCES `item_status` (`status_code`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_item_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
+--
+-- Dumping data for table `user_info`
+--
 
-CREATE TABLE `participants` (
-  `participant_id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `item_id` int NOT NULL,
-  `refund_flag` int NOT NULL DEFAULT '0',
-  `address` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`participant_id`),
-  KEY `fk_participant_item_idx` (`item_id`),
-  KEY `fk_participant_user_idx` (`user_id`),
-  CONSTRAINT `fk_participant_item` FOREIGN KEY (`item_id`) REFERENCES `auction_items` (`item_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_participant_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
+LOCK TABLES `user_info` WRITE;
+/*!40000 ALTER TABLE `user_info` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_info` ENABLE KEYS */;
+UNLOCK TABLES;
 
-CREATE TABLE `bids` (
-  `bid_id` int NOT NULL AUTO_INCREMENT,
-  `timestamp` datetime NOT NULL,
-  `user_id` int NOT NULL,
-  `item_id` int NOT NULL,
-  `participant_id` int NOT NULL,
-  `value` int NOT NULL,
-  PRIMARY KEY (`bid_id`),
-  KEY `fk_user_idx` (`user_id`),
-  KEY `fk_item_idx` (`item_id`),
-  KEY `fk_bid_participant_idx` (`participant_id`),
-  CONSTRAINT `fk_bid_item` FOREIGN KEY (`item_id`) REFERENCES `auction_items` (`item_id`),
-  CONSTRAINT `fk_bid_participant` FOREIGN KEY (`participant_id`) REFERENCES `participants` (`participant_id`),
-  CONSTRAINT `fk_bid_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-);
+--
+-- Dumping routines for database 'mydata'
+--
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-CREATE TABLE `interests` (
-  `interest_id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `item_id` int NOT NULL,
-  PRIMARY KEY (`interest_id`),
-  KEY `fk_interest_user_idx` (`user_id`),
-  KEY `fk_interest_item_idx` (`item_id`),
-  CONSTRAINT `fk_interest_item` FOREIGN KEY (`item_id`) REFERENCES `auction_items` (`item_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_interest_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-
-
-CREATE TABLE `sellers` (
-  `seller_id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `item_id` int NOT NULL,
-  `address` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`seller_id`),
-  KEY `fk_user_idx` (`user_id`),
-  CONSTRAINT `fk_seller_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-CREATE TABLE `transactions` (
-  `transaction_id` int NOT NULL,
-  `to_id` int NOT NULL,
-  `from_id` int NOT NULL,
-  `value` int DEFAULT NULL,
-  `timestamp` datetime NOT NULL,
-  `address` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`transaction_id`),
-  KEY `fk_trans_fromusr_idx` (`from_id`),
-  KEY `fk_trans_tousr_idx` (`to_id`),
-  CONSTRAINT `fk_trans_fromusr` FOREIGN KEY (`from_id`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_trans_tousr` FOREIGN KEY (`to_id`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-CREATE TABLE `highests` (
-  `user_id` int NOT NULL,
-  `item_id` int NOT NULL,
-  `participant_id` int NOT NULL,
-  `timestamp` datetime NOT NULL,
-  `value` int NOT NULL DEFAULT '0',
-  `winning_flag` int NOT NULL DEFAULT '0',
-  KEY `fk_highest_user_idx` (`user_id`),
-  KEY `fk_highest_item_idx` (`item_id`),
-  KEY `fk_highest_participant_idx` (`participant_id`),
-  CONSTRAINT `fk_highest_item` FOREIGN KEY (`item_id`) REFERENCES `auction_items` (`item_id`),
-  CONSTRAINT `fk_highest_participant` FOREIGN KEY (`participant_id`) REFERENCES `participants` (`participant_id`),
-  CONSTRAINT `fk_highest_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-);
-
-
-
-INSERT INTO `item_categories` VALUES (1,'Electronics'),(2,'Fashion'),(3,'Health & Beauty'),(4,'Motors'),(5,'Collectibles'),(6,'Sports'),(7,'Home & Garden');
-INSERT INTO `item_status` VALUES (1,'ongoing'),(2,'closed'),(3,'ended'),(4,'corrupted');
+-- Dump completed on 2022-11-16 21:23:00
     	
     	
 DROP PROCEDURE IF EXISTS whileProc;

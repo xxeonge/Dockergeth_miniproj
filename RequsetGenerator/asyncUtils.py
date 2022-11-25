@@ -21,5 +21,7 @@ async def transferBasicMoney(w3, client):
        )
 
 
-async def start_experiment(type, accounts, boxContractAddress, timescale):
-    Experiment.startExperiment(type, accounts, boxContractAddress, timescale)
+async def start_experiment(type, accounts, contractAddress, timescale):
+    Experiment.startExperiment(type, accounts, contractAddress, timescale)
+
+#loop.run_until_complete(start_experiment(test_type, w3.eth.accounts[1:client+1], contract_address,timescale))
